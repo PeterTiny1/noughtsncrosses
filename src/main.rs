@@ -36,20 +36,28 @@ fn main() {
             let arr_inp = inp
                 .split(',')
                 .map(|m| match m.trim().parse::<usize>() {
-                    Ok(i) => i - 1,
+                    Ok(i) => {
+                        if i > 0 {
+                            i - 1
+                        } else {
+                            usize::MAX
+                        }
+                    }
                     Err(_) => usize::MAX,
                 })
                 .collect::<Vec<usize>>();
             if arr_inp.contains(&usize::MAX) || arr_inp.len() != 2 {
                 println!("Invalid input!");
+                continue;
             } else if arr_inp.iter().any(|i| i >= &3) {
                 println!("Value(s) not in range (1-3)!");
+                continue;
             } else if grid[arr_inp[0]][arr_inp[1]] != ' ' {
                 println!("Space is taken");
-            } else {
-                valid = true;
-                arr = arr_inp.try_into().unwrap();
+                continue;
             }
+            valid = true;
+            arr = arr_inp.try_into().unwrap();
         }
         grid[arr[0]][arr[1]] = if cross { 'X' } else { 'O' };
         for line in grid.iter() {
