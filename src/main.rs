@@ -24,7 +24,7 @@ fn main() {
     let mut cross = true;
     while !gameover {
         let mut valid = false;
-        let mut arr: [i32; 2] = [0, 0];
+        let mut arr: [usize; 2] = [0, 0];
         while !valid {
             let mut inp = String::new();
             print!("Enter row and column separated by commas: ");
@@ -35,23 +35,23 @@ fn main() {
             inp = inp.trim().to_string();
             let arr_inp = inp
                 .split(',')
-                .map(|m| match m.trim().parse::<i32>() {
+                .map(|m| match m.trim().parse::<usize>() {
                     Ok(i) => i - 1,
-                    Err(_) => i32::MIN,
+                    Err(_) => usize::MAX,
                 })
-                .collect::<Vec<i32>>();
-            if arr_inp.contains(&i32::MIN) || arr_inp.len() != 2 {
+                .collect::<Vec<usize>>();
+            if arr_inp.contains(&usize::MAX) || arr_inp.len() != 2 {
                 println!("Invalid input!");
-            } else if arr_inp.iter().any(|i| i >= &3 || i < &0) {
+            } else if arr_inp.iter().any(|i| i >= &3) {
                 println!("Value(s) not in range (1-3)!");
-            } else if grid[arr_inp[0] as usize][arr_inp[1] as usize] != ' ' {
+            } else if grid[arr_inp[0]][arr_inp[1]] != ' ' {
                 println!("Space is taken");
             } else {
                 valid = true;
                 arr = arr_inp.try_into().unwrap();
             }
         }
-        grid[arr[0] as usize][arr[1] as usize] = if cross { 'X' } else { 'O' };
+        grid[arr[0]][arr[1]] = if cross { 'X' } else { 'O' };
         for line in grid.iter() {
             println!("{:?}", line);
         }
